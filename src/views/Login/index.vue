@@ -2,8 +2,53 @@
   <div id="login">
     <div class="login-wrap">
       <ul class="menu-tab">
-        <li v-for=" item in menuTab" :key="item.id" :class="{'current':item.current}" @click="toggleMenu(item)">{{item.txt}}</li>
+        <li
+          v-for="item in menuTab"
+          :key="item.id"
+          :class="{ current: item.current }"
+          @click="toggleMenu(item)"
+        >
+          {{ item.txt }}
+        </li>
       </ul>
+
+      <!-- 表单开始 -->
+      <el-form
+        :model="ruleForm"
+        status-icon
+        :rules="rules"
+        ref="ruleForm"
+        class="login-form"
+        size="medium"
+      >
+        <el-form-item prop="pass" class="item-form">
+          <label>邮箱</label>
+          <el-input
+            type="password"
+            v-model="ruleForm.pass"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item prop="checkPass" class="item-form">
+          <label>密码</label>
+          <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item prop="age" class="item-form">
+          <label>验证码</label>
+          <el-row :gutter="10">
+            <el-col :span="15"><div class="grid-content bg-purple"><el-input v-model.number="ruleForm.age"></el-input></div></el-col>
+            <el-col :span="9"><div class="grid-content bg-purple"><el-button type="success" class="block">获取验证码</el-button></div></el-col>
+          </el-row>
+          
+        </el-form-item>
+
+        <el-form-item>
+          <el-button type="danger" @click="submitForm('ruleForm')" class="login-btn block" >提交</el-button>
+        </el-form-item>
+      </el-form>
+      <!-- 表单结束 -->
     </div>
   </div>
 </template>
@@ -12,24 +57,85 @@
 export default {
   name: "",
   data() {
+    // 表单数据开始
+    var checkAge = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("年龄不能为空"));
+      }
+      setTimeout(() => {
+        if (!Number.isInteger(value)) {
+          callback(new Error("请输入数字值"));
+        } else {
+          if (value < 18) {
+            callback(new Error("必须年满18岁"));
+          } else {
+            callback();
+          }
+        }
+      }, 1000);
+    };
+    var validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请输入密码"));
+      } else {
+        if (this.ruleForm.checkPass !== "") {
+          this.$refs.ruleForm.validateField("checkPass");
+        }
+        callback();
+      }
+    };
+    var validatePass2 = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
+      } else if (value !== this.ruleForm.pass) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
+    // 表单数据结束
     return {
-      menuTab:[
-        {txt: "注册", current:true},
-        {txt: "登陆", current:false},
-      ]
+      menuTab: [
+        { txt: "注册", current: true },
+        { txt: "登陆", current: false },
+      ],
+
+      // 表单数据开始
+      ruleForm: {
+        pass: "",
+        checkPass: "",
+        age: "",
+      },
+      rules: {
+        pass: [{ validator: validatePass, trigger: "blur" }],
+        checkPass: [{ validator: validatePass2, trigger: "blur" }],
+        age: [{ validator: checkAge, trigger: "blur" }],
+      },
+      // 表单数据结束
     };
   },
   methods: {
-    toggleMenu(data){
-      console.log(data);    // Object
+    toggleMenu(data) {
+      console.log(data); // Object
       // console.log(this.data);  // undefined
-      this.menuTab.forEach(element => {
+      this.menuTab.forEach((element) => {
         element.current = false;
         // element.current = true;
       });
       data.current = true;
-
-    }
+    },
+    // 表单方法开始
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          alert("submit!");
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    // 表单方法结束
   },
   mounted() {},
 };
@@ -39,13 +145,13 @@ export default {
   height: 100vh;
   background-color: #344a5f;
 }
-.login-wrap{
-  width:330px;
-  margin:auto;
+.login-wrap {
+  width: 330px;
+  margin: auto;
 }
-.menu-tab{
+.menu-tab {
   text-align: center;
-  li{
+  li {
     display: inline-block;
     width: 88px;
     // height: 36px;
@@ -53,12 +159,30 @@ export default {
     font-size: 14px;
     border-radius: 2px;
     color: #fff;
-    cursor:pointer;
+    cursor: pointer;
   }
-.current{
-  // background-color: #2f4255;
-  background-color: rgba(0,0,0,.1);
 }
+.current {
+    // background-color: #2f4255;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  .login-form {
+    margin-top: 29px;
+    label {
+      display: block;
+      font-size: 14px;
+      color: #fff;
+    }
+  }
+  .item-form {
+    margin-bottom: 13px;
+  }
+  .block{
+    display: block;
+    width: 100%;
+  }
+  .login-btn{
+    margin-top: 19px;
 
-}
+  }
 </style>
