@@ -35,6 +35,11 @@
           <el-input type="text" v-model="ruleForm.password" autocomplete="off" minlength="6" maxlength="20"></el-input>
         </el-form-item>
 
+        <el-form-item prop="passwords" class="item-form" v-show="model === 'register'">
+          <label>重复密码</label>
+          <el-input type="text" v-model="ruleForm.passwords" autocomplete="off" minlength="6" maxlength="20"></el-input>
+        </el-form-item>
+
         <el-form-item prop="code" class="item-form">
           <label>验证码</label>
           <el-row :gutter="10">
@@ -91,6 +96,28 @@ export default {
       }
     };
 
+    // 验证重复密码
+    var validatePass2 = (rule, value, callback) => {
+      if(this.model === 'login'){
+        // console.log(`this.model = ${this.model}, = login`)
+        callback();
+      }
+      // 过滤后的数据
+      this.ruleForm.passwords = stripscript(value);  // 将过滤后的数据传递至data中
+      value = this.ruleForm.passwords;               // 将过滤后的数据保存在变量对象data中,用于后面的判断
+
+      // 验证密码
+      // let reg = /^(?!\D+$)(?![^a-zA-Z]+$)\S{6,20}$/;
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
+      }else if(value != this.ruleForm.password){
+        callback(new Error("两次密码输入不一致"));
+      }
+      else {
+        callback();
+      }
+    };
+
     var checkCode = (rule, value, callback) => {
       // 过滤后的数据
       this.ruleForm.code = stripscript(value);
@@ -110,27 +137,32 @@ export default {
     // 表单数据结束
     return {
       menuTab: [
-        { txt: "注册", current: true },
-        { txt: "登陆", current: false },
+        { txt: "登陆", current: true, type: 'login' },
+        { txt: "注册", current: false, type: 'register' },
+        
       ],
 
       // 表单数据开始
       ruleForm: {
         username: "",
         password: "",
+        passwords: "",
         code: "",
       },
       rules: {
         username: [{ validator: validateUsername, trigger: "blur" }],
         password: [{ validator: validatePass, trigger: "blur" }],
+        passwords: [{ validator: validatePass2, trigger: "blur" }],
         code: [{ validator: checkCode, trigger: "blur" }],
       },
       // 表单数据结束
+      model:"login"
     };
   },
   methods: {
     toggleMenu(data) {
       console.log(data); // Object
+      this.model = data.type;
       // console.log(this.data);  // undefined
       this.menuTab.forEach((element) => {
         element.current = false;
