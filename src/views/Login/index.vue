@@ -21,24 +21,24 @@
         class="login-form"
         size="medium"
       >
-        <el-form-item prop="pass" class="item-form">
+        <el-form-item prop="username" class="item-form">
           <label>邮箱</label>
           <el-input
-            type="password"
-            v-model="ruleForm.pass"
+            type="text"
+            v-model="ruleForm.username"
             autocomplete="off"
           ></el-input>
         </el-form-item>
 
-        <el-form-item prop="checkPass" class="item-form">
+        <el-form-item prop="password" class="item-form">
           <label>密码</label>
-          <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
+          <el-input type="password" v-model="ruleForm.password" autocomplete="off" minlength="6" maxlength="20"></el-input>
         </el-form-item>
 
-        <el-form-item prop="age" class="item-form">
+        <el-form-item prop="code" class="item-form">
           <label>验证码</label>
           <el-row :gutter="10">
-            <el-col :span="15"><div class="grid-content bg-purple"><el-input v-model.number="ruleForm.age"></el-input></div></el-col>
+            <el-col :span="15"><div class="grid-content bg-purple"><el-input v-model.number="ruleForm.code"></el-input></div></el-col>
             <el-col :span="9"><div class="grid-content bg-purple"><el-button type="success" class="block">获取验证码</el-button></div></el-col>
           </el-row>
           
@@ -58,41 +58,39 @@ export default {
   name: "",
   data() {
     // 表单数据开始
-    var checkAge = (rule, value, callback) => {
+    var checkCode = (rule, value, callback) => {
+      let reg = /^[a-z0-9]{6}$/;
       if (!value) {
-        return callback(new Error("年龄不能为空"));
+        return callback(new Error("验证码不能为空"));
+      }else if(!reg.test(value)){
+        return callback(new Error("验证码格式错误"))
+      }else{
+        callback();
       }
-      setTimeout(() => {
-        if (!Number.isInteger(value)) {
-          callback(new Error("请输入数字值"));
-        } else {
-          if (value < 18) {
-            callback(new Error("必须年满18岁"));
-          } else {
-            callback();
-          }
-        }
-      }, 1000);
+      
+    };
+    var validateUsername = (rule, value, callback) => {
+      let reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+      if (value === "") {
+        callback(new Error("请输入用户名"));
+      } else if (!reg.test(value)) {
+        callback(new Error("用户名格式错误!"));
+      } else {
+        callback();
+      }
     };
     var validatePass = (rule, value, callback) => {
+      let reg = /^(?!\D+$)(?![^a-zA-Z]+$)\S{6,20}$/
       if (value === "") {
         callback(new Error("请输入密码"));
-      } else {
-        if (this.ruleForm.checkPass !== "") {
-          this.$refs.ruleForm.validateField("checkPass");
-        }
+      }else if(!reg.test(value)){
+        callback(new Error("请输入6～20位的数字+字母"));
+      }
+      else {
         callback();
       }
     };
-    var validatePass2 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.ruleForm.pass) {
-        callback(new Error("两次输入密码不一致!"));
-      } else {
-        callback();
-      }
-    };
+    
     // 表单数据结束
     return {
       menuTab: [
@@ -102,14 +100,14 @@ export default {
 
       // 表单数据开始
       ruleForm: {
-        pass: "",
-        checkPass: "",
-        age: "",
+        username: "",
+        password: "",
+        code: "",
       },
       rules: {
-        pass: [{ validator: validatePass, trigger: "blur" }],
-        checkPass: [{ validator: validatePass2, trigger: "blur" }],
-        age: [{ validator: checkAge, trigger: "blur" }],
+        username: [{ validator: validateUsername, trigger: "blur" }],
+        password: [{ validator: validatePass, trigger: "blur" }],
+        code: [{ validator: checkCode, trigger: "blur" }],
       },
       // 表单数据结束
     };
