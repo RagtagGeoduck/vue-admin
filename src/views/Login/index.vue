@@ -32,7 +32,7 @@
 
         <el-form-item prop="password" class="item-form">
           <label>密码</label>
-          <el-input type="password" v-model="ruleForm.password" autocomplete="off" minlength="6" maxlength="20"></el-input>
+          <el-input type="text" v-model="ruleForm.password" autocomplete="off" minlength="6" maxlength="20"></el-input>
         </el-form-item>
 
         <el-form-item prop="code" class="item-form">
@@ -54,39 +54,55 @@
 </template>
 
 <script type="text/ecmascript-6">
+
+import {stripscript, validateUser, validatePWD, validateCOD} from '@/utils/validate'
+
 export default {
   name: "",
   data() {
     // 表单数据开始
-    var checkCode = (rule, value, callback) => {
-      let reg = /^[a-z0-9]{6}$/;
-      if (!value) {
-        return callback(new Error("验证码不能为空"));
-      }else if(!reg.test(value)){
-        return callback(new Error("验证码格式错误"))
-      }else{
-        callback();
-      }
-      
-    };
+    // 验证用户名
     var validateUsername = (rule, value, callback) => {
-      let reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+      // let reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
       if (value === "") {
         callback(new Error("请输入用户名"));
-      } else if (!reg.test(value)) {
+      } else if (validateUser(value)) {
         callback(new Error("用户名格式错误!"));
       } else {
         callback();
       }
     };
+
+    // 验证密码
     var validatePass = (rule, value, callback) => {
-      let reg = /^(?!\D+$)(?![^a-zA-Z]+$)\S{6,20}$/
+      // 过滤后的数据
+      this.ruleForm.password = stripscript(value);  // 将过滤后的数据传递至data中
+      value = this.ruleForm.password;               // 将过滤后的数据保存在变量对象data中,用于后面的判断
+
+      // 验证密码
+      // let reg = /^(?!\D+$)(?![^a-zA-Z]+$)\S{6,20}$/;
       if (value === "") {
         callback(new Error("请输入密码"));
-      }else if(!reg.test(value)){
+      }else if(validatePWD(value)){
         callback(new Error("请输入6～20位的数字+字母"));
       }
       else {
+        callback();
+      }
+    };
+
+    var checkCode = (rule, value, callback) => {
+      // 过滤后的数据
+      this.ruleForm.code = stripscript(value);
+      value = this.ruleForm.code;
+
+      // 提取验证码正则表达式
+      // let reg = /^[a-z0-9]{6}$/;
+      if (!value) {
+        return callback(new Error("验证码不能为空"));
+      }else if(validateCOD(value)){
+        return callback(new Error("验证码格式错误"))
+      }else{
         callback();
       }
     };
