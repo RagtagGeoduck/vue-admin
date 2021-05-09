@@ -60,12 +60,17 @@
 
 <script type="text/ecmascript-6">
 
+import {reactive, ref, onMounted} from '@vue/composition-api'
 import {stripscript, validateUser, validatePWD, validateCOD} from '@/utils/validate'
 
 export default {
-  name: "",
-  data() {
-    // 表单数据开始
+  name: "login",
+  setup(props, context){
+    // 这里放置数据，生命周期， 自定义的函数
+
+    /*
+        声明表达式函数
+    */
     // 验证用户名
     var validateUsername = (rule, value, callback) => {
       // let reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
@@ -81,8 +86,8 @@ export default {
     // 验证密码
     var validatePass = (rule, value, callback) => {
       // 过滤后的数据
-      this.ruleForm.password = stripscript(value);  // 将过滤后的数据传递至data中
-      value = this.ruleForm.password;               // 将过滤后的数据保存在变量对象data中,用于后面的判断
+      ruleForm.password = stripscript(value);  // 将过滤后的数据传递至data中
+      value = ruleForm.password;               // 将过滤后的数据保存在变量对象data中,用于后面的判断
 
       // 验证密码
       // let reg = /^(?!\D+$)(?![^a-zA-Z]+$)\S{6,20}$/;
@@ -97,20 +102,19 @@ export default {
     };
 
     // 验证重复密码
-    var validatePass2 = (rule, value, callback) => {
-      if(this.model === 'login'){
-        // console.log(`this.model = ${this.model}, = login`)
+    let validatePass2 = (rule, value, callback) => {
+      if(model.value === 'login'){
         callback();
       }
       // 过滤后的数据
-      this.ruleForm.passwords = stripscript(value);  // 将过滤后的数据传递至data中
-      value = this.ruleForm.passwords;               // 将过滤后的数据保存在变量对象data中,用于后面的判断
+      ruleForm.passwords = stripscript(value);  // 将过滤后的数据传递至data中
+      value = ruleForm.passwords;               // 将过滤后的数据保存在变量对象data中,用于后面的判断
 
       // 验证密码
       // let reg = /^(?!\D+$)(?![^a-zA-Z]+$)\S{6,20}$/;
       if (value === "") {
         callback(new Error("请再次输入密码"));
-      }else if(value != this.ruleForm.password){
+      }else if(value != ruleForm.password){
         callback(new Error("两次密码输入不一致"));
       }
       else {
@@ -118,10 +122,10 @@ export default {
       }
     };
 
-    var checkCode = (rule, value, callback) => {
+    let checkCode = (rule, value, callback) => {
       // 过滤后的数据
-      this.ruleForm.code = stripscript(value);
-      value = this.ruleForm.code;
+      ruleForm.code = stripscript(value);
+      value = ruleForm.code;
 
       // 提取验证码正则表达式
       // let reg = /^[a-z0-9]{6}$/;
@@ -132,47 +136,49 @@ export default {
       }else{
         callback();
       }
-    };
-    
-    // 表单数据结束
-    return {
-      menuTab: [
-        { txt: "登陆", current: true, type: 'login' },
-        { txt: "注册", current: false, type: 'register' },
-        
-      ],
-
-      // 表单数据开始
-      ruleForm: {
+    }
+    /*
+        声明数据
+    */
+    // 表单数据开始
+      const ruleForm = reactive({
         username: "",
         password: "",
         passwords: "",
         code: "",
-      },
-      rules: {
+      }) 
+      const rules = reactive( {
         username: [{ validator: validateUsername, trigger: "blur" }],
         password: [{ validator: validatePass, trigger: "blur" }],
         passwords: [{ validator: validatePass2, trigger: "blur" }],
         code: [{ validator: checkCode, trigger: "blur" }],
-      },
-      // 表单数据结束
-      model:"login"
-    };
-  },
-  methods: {
-    toggleMenu(data) {
+      })
+    // 表单数据结束
+
+    const menuTab= reactive( [
+        { txt: "登陆", current: true, type: 'login' },
+        { txt: "注册", current: false, type: 'register' },
+      ]);
+    console.log(menuTab);
+    // 模块值
+    const model = ref("login");
+
+    /*
+        声明函数
+    */
+    const toggleMenu = (data =>{
       console.log(data); // Object
-      this.model = data.type;
-      // console.log(this.data);  // undefined
-      this.menuTab.forEach((element) => {
+      // 更新 model的值
+      model.value = data.type;
+      menuTab.forEach((element) => {
         element.current = false;
         // element.current = true;
       });
       data.current = true;
-    },
+    })
     // 表单方法开始
-    submitForm(formName) {
-      this.$refs[formName].validate((valid) => {
+    const submitForm = (formName => {
+      context.refs[formName].validate((valid) => {
         if (valid) {
           alert("submit!");
         } else {
@@ -180,10 +186,25 @@ export default {
           return false;
         }
       });
-    },
-    // 表单方法结束
-  },
-  mounted() {},
+    })
+
+    /*
+        生命周期
+    */
+    // 挂载函数
+    onMounted(()=>{
+
+    })
+
+    return{
+      menuTab,
+      model,
+      rules,
+      ruleForm,
+      toggleMenu,
+      submitForm
+    }
+  }
 };
 </script>
 <style  scoped lang="scss">
