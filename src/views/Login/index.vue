@@ -60,6 +60,8 @@
 
 <script type="text/ecmascript-6">
 
+// import axios from 'axios'
+import service from '@/utils/request'
 import {reactive, ref, onMounted} from '@vue/composition-api'
 import {stripscript, validateUser, validatePWD, validateCOD} from '@/utils/validate'
 
@@ -159,7 +161,7 @@ export default {
         { txt: "登陆", current: true, type: 'login' },
         { txt: "注册", current: false, type: 'register' },
       ]);
-    console.log(menuTab);
+    // console.log(menuTab);
     // 模块值
     const model = ref("login");
 
