@@ -1,6 +1,11 @@
 import axios from 'axios'
 
-const service = axios.create();
+// const BASEURL = process.env.NODE_ENV === "production"? "": '/devApi';
+const service = axios.create({
+  // baseURL: BASEURL,
+  baseURL: '/api',
+  timeout:1000
+});
 
 // 添加请求拦截器
 service.interceptors.request.use(function (config) {
@@ -21,14 +26,14 @@ service.interceptors.response.use(function (response) {
   });
 
 // 发送 POST 请求
-axios({
-    method: 'post',
-    url: '/user/12345',
-    data: {
-      firstName: 'Fred',
-      lastName: 'Flintstone'
-    }
-  });
+// axios({
+//     method: 'post',
+//     url: '/user/12345',
+//     data: {
+//       firstName: 'Fred',
+//       lastName: 'Flintstone'
+//     }
+//   });
 
 // 设置默认暴露
 export default service;

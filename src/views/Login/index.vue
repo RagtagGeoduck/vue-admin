@@ -44,7 +44,7 @@
           <label>验证码</label>
           <el-row :gutter="10">
             <el-col :span="15"><div class="grid-content bg-purple"><el-input v-model.number="ruleForm.code"></el-input></div></el-col>
-            <el-col :span="9"><div class="grid-content bg-purple"><el-button type="success" class="block">获取验证码</el-button></div></el-col>
+            <el-col :span="9"><div class="grid-content bg-purple"><el-button type="success" class="block" @click="getSms()">获取验证码</el-button></div></el-col>
           </el-row>
           
         </el-form-item>
@@ -61,7 +61,7 @@
 <script type="text/ecmascript-6">
 
 // import axios from 'axios'
-import service from '@/utils/request'
+import {GetSms} from '@/api/login'
 import {reactive, ref, onMounted} from '@vue/composition-api'
 import {stripscript, validateUser, validatePWD, validateCOD} from '@/utils/validate'
 
@@ -71,7 +71,7 @@ export default {
     // 这里放置数据，生命周期， 自定义的函数
 
     /*
-        声明表达式函数
+      声明表达式函数
     */
     // 验证用户名
     var validateUsername = (rule, value, callback) => {
@@ -111,8 +111,7 @@ export default {
       // 过滤后的数据
       ruleForm.passwords = stripscript(value);  // 将过滤后的数据传递至data中
       value = ruleForm.passwords;               // 将过滤后的数据保存在变量对象data中,用于后面的判断
-
-      // 验证密码
+      // 验证重复密码
       // let reg = /^(?!\D+$)(?![^a-zA-Z]+$)\S{6,20}$/;
       if (value === "") {
         callback(new Error("请再次输入密码"));
@@ -124,11 +123,11 @@ export default {
       }
     };
 
+    // 验证验证码
     let checkCode = (rule, value, callback) => {
       // 过滤后的数据
       ruleForm.code = stripscript(value);
       value = ruleForm.code;
-
       // 提取验证码正则表达式
       // let reg = /^[a-z0-9]{6}$/;
       if (!value) {
@@ -157,17 +156,18 @@ export default {
       })
     // 表单数据结束
 
+    // 按钮值
     const menuTab= reactive( [
         { txt: "登陆", current: true, type: 'login' },
         { txt: "注册", current: false, type: 'register' },
       ]);
-    // console.log(menuTab);
     // 模块值
     const model = ref("login");
 
     /*
         声明函数
     */
+    // 函数 - 切换按钮
     const toggleMenu = (data =>{
       console.log(data); // Object
       // 更新 model的值
@@ -178,7 +178,18 @@ export default {
       });
       data.current = true;
     })
-    // 表单方法开始
+    /*
+        函数 - 获取验证码
+    */
+   const getSms = (()=>{
+     let data = {
+       username: ruleForm.username,
+      //  module: model.value
+     }
+     GetSms(data)
+      // GetSms({username:ruleForm.username})
+   })
+    // 函数 - 提交表单
     const submitForm = (formName => {
       context.refs[formName].validate((valid) => {
         if (valid) {
@@ -195,7 +206,7 @@ export default {
     */
     // 挂载函数
     onMounted(()=>{
-
+      GetSms()
     })
 
     return{
@@ -204,7 +215,8 @@ export default {
       rules,
       ruleForm,
       toggleMenu,
-      submitForm
+      submitForm,
+      getSms
     }
   }
 };
