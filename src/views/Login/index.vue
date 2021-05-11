@@ -63,7 +63,7 @@
           <el-row :gutter="10">
             <el-col :span="15"
               ><div class="grid-content bg-purple">
-                <el-input v-model.number="ruleForm.code"></el-input></div
+                <el-input v-model="ruleForm.code"></el-input></div
             ></el-col>
             <el-col :span="9"
               ><div class="grid-content bg-purple">
@@ -96,7 +96,7 @@
 
 <script type="text/ecmascript-6">
 // import axios from 'axios'
-import { GetSms, Register } from "@/api/login";
+import { GetSms, Register, Login } from "@/api/login";
 import { reactive, ref, onMounted } from "@vue/composition-api";
 import {
   stripscript,
@@ -228,7 +228,7 @@ export default {
 
       // 重置表单(此处需要添加ruleForm)
       context.refs["ruleForm"].resetFields();
-      codeButtonStatus.text = "获取验证码"
+      codeButtonStatus.text = "获取验证码";
     };
     /*
         函数 - 获取验证码
@@ -266,7 +266,6 @@ export default {
               message: data.message,
               type: "success",
             });
-
           })
           .catch((error) => {
             console.log(error);
@@ -279,23 +278,11 @@ export default {
         if (valid) {
           // 验证成功后的操作
           // alert("submit!");
-          let requestData = {
-            username: ruleForm.username,
-            password: ruleForm.password,
-            code: ruleForm.code,
-            module: "register"
-          }
-          Register(requestData).then(response=>{
-            context.root.$message({
-              message: "注册成功",
-              type: "success",
-            }) 
-          }).catch(error =>{
-            console.log(`函数-提交表单-注册error`),
-            console.log(error)
-          })
+          model.value === "login" ? login() : register();
 
-
+          // 模拟注册成功
+          toggleMenu(menuTab[0]);
+          clearCountDown();
         } else {
           console.log("error submit!!");
           return false;
@@ -304,19 +291,69 @@ export default {
     };
 
     // 函数 - 倒计时
-    const countDown = ((number) => {
+    const countDown = (number) => {
       let time = number;
-      timer.value = setInterval(()=>{
-        time --;
+      timer.value = setInterval(() => {
+        time--;
         codeButtonStatus.text = `倒计时${time}秒`;
         // 清除定时器
-        if(time === 0){
+        if (time === 0) {
           clearInterval(timer.value);
           codeButtonStatus.status = false;
-          codeButtonStatus.text = "再次获取"
+          codeButtonStatus.text = "再次获取";
         }
-      },1000)
-    })
+      }, 1000);
+    };
+
+    // 函数 - 清除定时器
+    const clearCountDown = () => {
+      // 还原 验证码按钮 默认状态
+      codeButtonStatus.status = false;
+      codeButtonStatus.value = "获取验证码";
+      // 清除定时器
+      clearInterval(timer.value);
+    };
+
+    // 函数 - 表单登陆
+    const login = () => {
+      let requestData = {
+        username : ruleForm.username,
+        password : ruleForm.password,
+        code : ruleForm.code
+      };
+      Login(requestData)
+      .then((response)=>{
+        let data = response.data
+        alert(`登陆成功 + ${data.message}`);
+        console.log(data);
+      }).catch(error=>{
+        console.log(requestData.code);
+        console.log('登陆失败');
+        console.log(error);
+      })
+
+      
+    };
+    // 函数 - 表单创建
+    const register = () => {
+      let requestData = {
+        username: ruleForm.username,
+        password: ruleForm.password,
+        code: ruleForm.code,
+        module: "register",
+      };
+      Register(requestData)
+        .then((response) => {
+          let data = response.data;
+          context.root.$message({
+            message: data.message,
+            type: "success",
+          });
+        })
+        .catch((error) => {
+          console.log(`函数-提交表单-注册error`), console.log(error);
+        });
+    };
 
     /*
       生命周期-------------------------------------------------------------------- 生命周期
@@ -336,10 +373,15 @@ export default {
 
       rules,
       ruleForm,
+
+      // 声明函数
       toggleMenu,
       submitForm,
       getSms,
-      countDown
+      countDown,
+      clearCountDown,
+      login,
+      register,
     };
   },
 };
