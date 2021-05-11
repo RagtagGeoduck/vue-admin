@@ -6,7 +6,7 @@ import {Message} from 'element-ui'
 const service = axios.create({
   // baseURL: BASEURL,
   baseURL: '/api',
-  timeout:1000
+  timeout:15000
 });
 
 // 添加请求拦截器
@@ -35,16 +35,6 @@ service.interceptors.response.use(function (response) {
     // 对响应错误做点什么
     return Promise.reject(error);
   });
-
-// 发送 POST 请求
-// axios({
-//     method: 'post',
-//     url: '/user/12345',
-//     data: {
-//       firstName: 'Fred',
-//       lastName: 'Flintstone'
-//     }
-//   });
 
 // 设置默认暴露
 export default service;

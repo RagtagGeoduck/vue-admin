@@ -10,3 +10,14 @@ export function GetSms(data){
         data
     })
 }
+
+/*
+    注册
+*/
+export function Register(data){
+    return service.request({
+        method: "POST",
+        url: '/register/',
+        data
+    })
+}
