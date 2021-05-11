@@ -22,11 +22,13 @@
         size="medium"
       >
         <el-form-item prop="username" class="item-form">
-          <label>邮箱</label>
+          <!-- <label>邮箱</label> -->
+          <label for="username">邮箱</label>
           <el-input
             type="text"
             v-model="ruleForm.username"
             autocomplete="off"
+            id="username"
           ></el-input>
         </el-form-item>
 
@@ -50,7 +52,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="danger" @click="submitForm('ruleForm')" class="login-btn block" >提交</el-button>
+          <el-button type="danger" @click="submitForm('ruleForm')" class="login-btn block " :disabled="loginButtonStatus">{{ model=="login"? "登陆":"注册" }}</el-button>
         </el-form-item>
       </el-form>
       <!-- 表单结束 -->
@@ -164,6 +166,10 @@ export default {
     // 模块值
     const model = ref("login");
 
+    // const loginButtonStatus = ref("false");
+    const loginButtonStatus = ref(false);
+
+
     /*
         声明函数
     */
@@ -182,12 +188,28 @@ export default {
         函数 - 获取验证码
     */
    const getSms = (()=>{
+     // 用户名为空提示,无需调用接口,直接返回
+     if(ruleForm.username == ""){
+       context.root.$message.error('用户名不能为空-index.vue');
+       return false;
+     }
+     // 用户名邮箱格式问题
+     if(validateUser(ruleForm.username)){
+       context.root.$message.error('用户名格式不正确-index.vue');
+       return false;
+     }
+
+    // 请求接口    
      let data = {
        username: ruleForm.username,
-      //  module: model.value
+       module: 'login'
      }
-     GetSms(data)
       // GetSms({username:ruleForm.username})
+      GetSms(data).then(response =>{
+
+      }).catch(error=>{
+        console.log(error)
+      })
    })
     // 函数 - 提交表单
     const submitForm = (formName => {
@@ -206,12 +228,16 @@ export default {
     */
     // 挂载函数
     onMounted(()=>{
-      GetSms()
+      // GetSms()
     })
 
     return{
+      // 声明值
       menuTab,
       model,
+      loginButtonStatus,
+
+
       rules,
       ruleForm,
       toggleMenu,
