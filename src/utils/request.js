@@ -9,9 +9,14 @@ const service = axios.create({
   timeout:15000
 });
 
+
 // 添加请求拦截器
 service.interceptors.request.use(function (config) {
-    // 在发送请求之前做些什么
+    // 在发送请求之前做些什么(在请求头添加参数)
+    config.headers['Tokey'] = '111111';
+    config.headers['userId'] = '22222';
+    config.headers['sui'] = '33333333';
+
     return config;
   }, function (error) {
     // 对请求错误做些什么

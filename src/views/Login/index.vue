@@ -96,6 +96,7 @@
 
 <script type="text/ecmascript-6">
 // import axios from 'axios'
+import sha1 from 'js-sha1'
 import { GetSms, Register, Login } from "@/api/login";
 import { reactive, ref, onMounted } from "@vue/composition-api";
 import {
@@ -217,14 +218,20 @@ export default {
     */
     // 函数 - 切换按钮
     const toggleMenu = (data) => {
-      console.log(data); // Object
+      // console.log(data); // Object
       // 更新 model的值
       model.value = data.type;
       menuTab.forEach((element) => {
         element.current = false;
       });
-      data.current = true;
-      loginButtonStatus.value = true;
+      // 重置按钮的禁用状态
+      resetButtonStatus({
+        codeBtnStatus:true,
+        subBtnStatus:true,
+      });
+
+      // 清除计时器
+      clearCountDown();
 
       // 重置表单(此处需要添加ruleForm)
       context.refs["ruleForm"].resetFields();
@@ -251,7 +258,15 @@ export default {
         module: model.value,
       };
       // 点击后 验证码按钮 为 禁用状态; 注册按钮为 可用状态
-      (codeButtonStatus.status = true), (codeButtonStatus.text = "请求中");
+      resetButtonStatus({
+        codeBtnStatus:true,
+        subBtnStatus:true,
+      });
+      updateBtnStatus({
+        codeBtnStatus:true,
+        codeBtnStatusText:"请求中"
+      });
+      // (codeButtonStatus.status = true), (codeButtonStatus.text = "请求中");
       countDown(5);
       loginButtonStatus.value = false;
 
@@ -292,6 +307,10 @@ export default {
 
     // 函数 - 倒计时
     const countDown = (number) => {
+      // 如果存在倒计时, 清除原有的倒计时
+      // if(timer.value){clearCountDown};
+      if(timer.value){clearInterval(timer.value)};
+
       let time = number;
       timer.value = setInterval(() => {
         time--;
@@ -310,6 +329,7 @@ export default {
       // 还原 验证码按钮 默认状态
       codeButtonStatus.status = false;
       codeButtonStatus.value = "获取验证码";
+      
       // 清除定时器
       clearInterval(timer.value);
     };
@@ -318,7 +338,7 @@ export default {
     const login = () => {
       let requestData = {
         username : ruleForm.username,
-        password : ruleForm.password,
+        password : sha1(ruleForm.password),
         code : ruleForm.code
       };
       Login(requestData)
@@ -338,7 +358,7 @@ export default {
     const register = () => {
       let requestData = {
         username: ruleForm.username,
-        password: ruleForm.password,
+        password: sha1(ruleForm.password),
         code: ruleForm.code,
         module: "register",
       };
@@ -354,6 +374,18 @@ export default {
           console.log(`函数-提交表单-注册error`), console.log(error);
         });
     };
+
+    // 函数 - 还原 获取验证码 按钮样式
+    const resetButtonStatus = (params)=>{
+      codeButtonStatus.value = params.codeBtnStatus;
+      loginButtonStatus.value = params.codeBtnStatus;
+    }
+
+    // 函数 - 更新 获取验证码 按钮样式（数字变化,文字显示）
+    const updateBtnStatus = (params) =>{  
+      codeButtonStatus.status = params.codeBtnStatus,
+      codeButtonStatus.text = params.codeBtnStatusText
+    }
 
     /*
       生命周期-------------------------------------------------------------------- 生命周期
@@ -382,6 +414,8 @@ export default {
       clearCountDown,
       login,
       register,
+      resetButtonStatus,
+      updateBtnStatus
     };
   },
 };
