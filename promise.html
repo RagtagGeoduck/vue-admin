@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise基础</title>
+</head>
+
+<body>
+    <script>
+        // Promise
+        // let promise = new Promise((resolve, reject)=>{
+        //     resolve("成功-resovle");
+        //     // reject("失败-reject")
+        // }).then(response=>{
+        //     console.log(`返回成功后的操作 ${response}`);
+
+        // }).catch(error=>{
+        //     console.log("返回失败后的操作");
+        //     console.log(error);
+        // })
+
+        // 链式调用 ------------------------------------------------ 1.编写函数
+        function promise01(status) {
+            return new Promise((resolve, reject) => {
+                if (status) {
+                    console.log("promise01成功->执行resolve()")
+                    resolve("promise01返回成功<-response内容");
+                } else if (!status) {
+                    console.log("promise01失败-执行reject()")
+                    reject("promise01返回失败-error内容");
+                }
+            })
+        }
+
+        function promise02(status) {
+            return new Promise((resolve, reject)=>{
+                if(status){
+                    console.log("02成功->执行resolve()->给response添加数据");
+                    resolve("promise02返回成功<-response内容");
+                }
+                if(!status){
+                    console.log("02失败");
+                    reject("promise02返回失败-error内容");
+                }
+            })
+        }
+
+        function promise03(status){
+            return new Promise((resolve, reject)=>{
+                if(status){
+                    resolve('resolve->response');
+                }
+                if(!status){
+                    reject('reject->error');
+                }
+            })
+        }
+
+
+        // 链式调用 ------------------------------------------------ 2.开始链式调用
+        // promise01(true)
+        // // 调用02
+        // .then(response => {
+        //     console.log(response);
+        //     return promise02(true);
+        // })
+        // .then(response=>{
+        //     console.log(response)
+        //     return promise03(true);
+        // })
+        // .then(response=>{
+        //     console.log(response);
+        // })
+        // .catch(error => {
+        //     console.log(error);
+        // })
+
+        // Promise ------------------------------------------------ Promise.all([])
+        // console.log('========⬇️⬇️')
+        // Promise.all([promise01(true),promise02(true)])
+        // .then(response=>{
+        //     console.log('----⬇️')
+        //     console.log("all promise function completed")
+        //     console.log('----⬆️')
+        // })
+        // .catch(error=>{
+        //     console.log('----')
+        //     console.log("one of promises was not completed")
+        // })
+        // console.log('========⬆️⬆️')
+
+
+        // Promise ------------------------------------------------ Promise.race([])
+        console.log('========⬇️⬇️')
+        Promise.race([promise01(false),promise02(true)])
+        .then(response=>{
+            console.log('----⬇️')
+            console.log("all promise function completed")
+            console.log('----⬆️')
+        })
+        .catch(error=>{
+            console.log('----')
+            console.log("one of promises was not completed")
+        })
+        console.log('========⬆️⬆️')
+    </script>
+</body>
+
+</html>
