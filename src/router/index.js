@@ -5,8 +5,7 @@ import Login from '../views/Login/index.vue'
 Vue.use(Router);
 
 export default new Router({
-  routes: [
-    {
+  routes: [{
       path: "/",
       // name: "home",
       // component: Home
@@ -17,5 +16,15 @@ export default new Router({
       name: "login",
       component: Login
     },
+    {
+      path: "/console",
+      name: "Console",
+      component: () => import("../views/Layout/index.vue"),
+      children: [{
+        path: "/console-index",
+        name: "Console-index",
+        component: () => import("../views/Console/index.vue")
+      }]
+    }
   ]
 });

@@ -1,0 +1,27 @@
+<template>
+  <div id="header-wrap">./Layout/Components/Header.vue</div>
+</template>
+
+<script type="text/ecmascript-6">
+export default {
+  name: '',
+  components: {},
+  setup () {},
+}
+</script>
+<style  scoped lang="scss" >
+@import "../../../styles/config.scss";
+#header-wrap{
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: $navMenu;
+  height: 75px;
+  background-color: #fff;
+  box-shadow:0, 3px, 16px, 0 rgba(0,0,0,0.1);
+  -webkit-box-shadow:0 3px 16px 0 rgba(0,0,0,0.1);
+  // -webkit-box-shadow: 0 3px 16px 0 rgba(0,0,0,0.9);
+  z-index: 99;
+}
+
+</style>

@@ -296,8 +296,12 @@ export default {
           model.value === "login" ? login() : register();
 
           // 模拟注册成功
-          toggleMenu(menuTab[0]);
-          clearCountDown();
+          // toggleMenu(menuTab[0]);
+          // clearCountDown();
+          // context.root.$router.push({
+          //   name: 'Console'
+          // })
+
         } else {
           console.log("error submit!!");
           return false;
@@ -344,15 +348,16 @@ export default {
       Login(requestData)
       .then((response)=>{
         let data = response.data
-        alert(`登陆成功 + ${data.message}`);
+        alert(`${data.message} + 正在跳转页面`);
         console.log(data);
+        context.root.$router.push({
+          path:"/console"
+        })
       }).catch(error=>{
         console.log(requestData.code);
         console.log('登陆失败');
         console.log(error);
       })
-
-      
     };
     // 函数 - 表单创建
     const register = () => {
@@ -369,6 +374,8 @@ export default {
             message: data.message,
             type: "success",
           });
+          toggleMenu(menuTab[0]);
+          clearCountDown();
         })
         .catch((error) => {
           console.log(`函数-提交表单-注册error`), console.log(error);
