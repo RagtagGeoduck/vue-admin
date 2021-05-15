@@ -1,5 +1,5 @@
 <template>
-  <div>./src/views/User/index.vue</div>
+  <div>./src/views/Info/category.vue</div>
 </template>
 
 <script type="text/ecmascript-6">

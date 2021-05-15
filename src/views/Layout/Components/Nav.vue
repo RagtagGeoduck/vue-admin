@@ -1,19 +1,75 @@
 <template>
-  <div id="nav-wrap">./Layout/Components/Nav.vue</div>
+  <div id="nav-wrap">
+    <el-menu
+      default-active="1-4-1"
+      class="el-menu-vertical-demo"
+      @open="handleOpen"
+      @close="handleClose"
+      :collapse="isCollapse"
+      text-color="#fff"
+      background-color="transparent"
+      router
+    >
+      <template v-for="(item, index) in routers">
+        <el-submenu  v-if="!item.hidden" :index="index+''" :key="item.id" >
+          <!-- 一级菜单 -->
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span slot="title">{{ item.meta.name }}</span>
+          </template>
+
+          <!-- 二级菜单 -->
+          <el-menu-item
+            v-for="(subItem) in item.children"
+            :key="subItem.id"
+            :index="subItem.path"
+            >{{ subItem.meta.name }}</el-menu-item
+          >
+        </el-submenu>
+      </template>
+    </el-menu>
+  </div>
 </template>
 
 <script type="text/ecmascript-6">
+import { reactive, ref, isRef, toRefs, onMounted } from "@vue/composition-api";
 export default {
-  name: '',
+  name: "navMenu",
   components: {},
-  setup () {},
-}
+  setup(props, { root }) {
+    // data 数据 ----------------------------------------------------------------- data 数据
+    const isCollapse = ref(false);
+    // const routers = reactive(root.$router.options.routers);
+    const routers = reactive(root.$router.options.routes);
+    console.log(routers);
+
+    // 函数 ----------------------------------------------------------------- 函数
+    const handleOpen = (key, keyPath) => {
+      console.log(key, keyPath);
+    };
+    const handleClose = (key, keyPath) => {
+      console.log(key, keyPath);
+    };
+
+    // 挂载 ----------------------------------------------------------------- 挂载
+
+    // return ----------------------------------------------------------------- return
+    return {
+      // 数据
+      isCollapse,
+      routers,
+      // 函数
+      handleOpen,
+      handleClose,
+    };
+  },
+};
 </script>
 <style  scoped lang="scss" >
-@import '../../../styles/config.scss' ;
-#nav-wrap{
-  position:fixed;
-  top:0;
+
+#nav-wrap {
+  position: fixed;
+  top: 0;
   left: 0;
   width: $navMenu;
   height: 100vh;

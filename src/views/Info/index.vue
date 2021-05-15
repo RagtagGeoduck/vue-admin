@@ -1,10 +1,10 @@
 <template>
-  <div>./src/views/User/index.vue</div>
+  <div>./src/views/Info/index.vue</div>
 </template>
 
 <script type="text/ecmascript-6">
 export default {
-  name: '',
+  name: 'infoIndex',
   components: {},
   setup () {},
 }

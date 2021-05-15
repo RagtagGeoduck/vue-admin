@@ -1,0 +1,19 @@
+// .el-submenu .el-menu-item.is-active{
+//     background-color: #574b5b !important;
+//     color: #fff;
+// }
+// 合并至下方
+.el-submenu .el-menu-item{
+    font-size: 13px;
+    padding-left: 50px !important;   
+    &.is-active{
+        background-color: #574b5b !important;
+        color: #fff;
+    }
+}
+
+.el-submenu{
+    &.is-active.is-opened .el-submenu__title{
+        background-color: $mainColor !important;
+    }
+}

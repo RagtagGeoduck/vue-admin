@@ -1,7 +1,7 @@
 <template>
   <div id="main-wrap">
     ./Layout/Components/Main.vue
-
+    <router-view></router-view>
   </div>
 </template>
 
@@ -13,7 +13,7 @@ export default {
 }
 </script>
 <style  scoped lang="scss" >
-@import "../../../styles/config.scss";
+// @import "../../../styles/config.scss"; // 添加到了main.scss
 #main-wrap{
   position:fixed;
   top:75px;
