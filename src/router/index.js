@@ -30,7 +30,9 @@ export default new Router({
       name: "Console",
       redirect: "InfoIndex",
       meta:{
-        name: "控制台"
+        name: "控制台",
+        icon: "el-icon-odometer",
+        sIcon: "dash-board"
       },
       // component: () => import("../views/Layout/index.vue"),
       component: Layout,
@@ -47,7 +49,10 @@ export default new Router({
       path: "/info",
       name: "Info",
       meta: {
-        name: "信息管理"
+        name: "信息管理",
+        icon: "el-icon-tickets",
+        sIcon: "list"
+
       },
       component: Layout,
       children: [
@@ -56,6 +61,7 @@ export default new Router({
           name: "InfoIndex",
           meta: {
             name: "信息列表",
+            
           },
           component: () => import("../views/Info/index.vue")
         },
@@ -73,7 +79,10 @@ export default new Router({
       path: "/user",
       name: "User",
       meta: {
-        name: "用户管理"
+        name: "用户管理",
+        icon: "el-icon-user",
+        sIcon: "user"
+
       },
       component: Layout,
       children:[

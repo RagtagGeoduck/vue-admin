@@ -10,7 +10,7 @@ export default {
 }
 </script>
 <style  scoped lang="scss" >
-@import "../../../styles/config.scss";
+// @import "../../../styles/config.scss";
 #header-wrap{
   position: fixed;
   top: 0;

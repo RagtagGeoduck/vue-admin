@@ -14,10 +14,13 @@
         <el-submenu  v-if="!item.hidden" :index="index+''" :key="item.id" >
           <!-- 一级菜单 -->
           <template slot="title">
-            <i class="el-icon-location"></i>
+            <!-- <i :class="item.meta.icon"></i> -->
+            <!-- <svg-icon :iconClass="item.meta.sIcon" :className="item.meta.sIcon"></svg-icon> -->
+            <!-- <svg-icon-test :iconClass="item.meta.sIcon" :className="item.meta.sIcon"></svg-icon-test> -->
+            <svg-icon :iconClass='item.meta.sIcon' :className='item.meta.sIcon'></svg-icon>
             <span slot="title">{{ item.meta.name }}</span>
           </template>
-
+          
           <!-- 二级菜单 -->
           <el-menu-item
             v-for="(subItem) in item.children"
@@ -28,16 +31,19 @@
         </el-submenu>
       </template>
     </el-menu>
+    
   </div>
+  
 </template>
 
 <script type="text/ecmascript-6">
 import { reactive, ref, isRef, toRefs, onMounted } from "@vue/composition-api";
+import SvgIcon from '../../../icon/SvgIcon.vue';
 export default {
   name: "navMenu",
-  components: {},
+  components: {SvgIcon},
   setup(props, { root }) {
-    // data 数据 ----------------------------------------------------------------- data 数据
+    // data 数据 ------------------------------------------------------------ data 数据
     const isCollapse = ref(false);
     // const routers = reactive(root.$router.options.routers);
     const routers = reactive(root.$router.options.routes);
@@ -53,7 +59,7 @@ export default {
 
     // 挂载 ----------------------------------------------------------------- 挂载
 
-    // return ----------------------------------------------------------------- return
+    // return -------------------------------------------------------------- return
     return {
       // 数据
       isCollapse,
@@ -66,7 +72,7 @@ export default {
 };
 </script>
 <style  scoped lang="scss" >
-
+// @import "../../../styles/config.scss";
 #nav-wrap {
   position: fixed;
   top: 0;
@@ -75,4 +81,5 @@ export default {
   height: 100vh;
   background-color: #344a5f;
 }
+
 </style>
