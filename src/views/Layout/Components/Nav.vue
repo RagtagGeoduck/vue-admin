@@ -1,5 +1,6 @@
 <template>
   <div id="nav-wrap">
+    <h1 class="logo"><img src="../../../assets/logo.png" alt=""></h1>
     <el-menu
       default-active="1-4-1"
       class="el-menu-vertical-demo"
@@ -81,5 +82,12 @@ export default {
   height: 100vh;
   background-color: #344a5f;
 }
-
+.logo{
+  text-align: center;
+  img{
+    width:90px;
+    margin:28px auto 25px;
+    // margin-top: 10px;
+  }
+}
 </style>

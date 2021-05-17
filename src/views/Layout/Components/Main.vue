@@ -1,7 +1,10 @@
 <template>
   <div id="main-wrap">
-    ./Layout/Components/Main.vue
-    <router-view></router-view>
+    <div class="main-content">
+      <div class="content">
+        <router-view></router-view>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -15,13 +18,31 @@ export default {
 <style  scoped lang="scss" >
 // @import "../../../styles/config.scss"; // 添加到了main.scss
 #main-wrap{
-  position:fixed;
-  top:75px;
-  left: $navMenu;
-  right: 0;
-  bottom: 0;
-  border: 30px solid #f7f7f7;
+  height:100vh;
+  // position:fixed;
+  // top:75px;
+  // left: $navMenu;
+  // right: 0;
+  // bottom: 0;
+  // border: 30px solid #f7f7f7;
+  // box-sizing: border-box;
+  // -webkit-box-sizing: border-box;
+}
+.main-content{
+  width:100%;
+  height:100%;
+  padding:$LayoutHeader + 30px 30px 0 $navMenu + 30px;
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
+
+}
+.content{
+  width:100%;
+  height:100%;
+  background-color: #fff;
+  padding:30px 30px 0 30px;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  border-radius: 5px;
 }
 </style>
