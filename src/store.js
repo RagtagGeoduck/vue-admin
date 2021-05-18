@@ -15,12 +15,9 @@ export default new Vuex.Store({
   mutations: {
     SET_COLLAPSE(state){
       state.isCollapse = !state.isCollapse;
-      console.log(state.isCollapse)
     },
     SET_COUNT(state, value){
       state.count += value
-      // console.log(state.count)
-      // console.log(state.count)
     }
   },
   actions: {}

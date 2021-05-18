@@ -90,5 +90,9 @@ export default {
 }
 .close{
   #nav-wrap {width: $navMenu-min;}
+  .logo img{
+    width: 70%;
+    @include webkit(transition, all 0.3s ease 0s);
+  }
 }
 </style>

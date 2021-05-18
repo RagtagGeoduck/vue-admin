@@ -35,6 +35,7 @@ export default {
   // box-sizing: border-box;
   // -webkit-box-sizing: border-box;
   @include webkit(transition, all .3s ease 0s);
+  @include webkit(box-sizing, border-box);
 }
 .content{
   width:100%;
@@ -43,8 +44,9 @@ export default {
   padding:30px 30px 0 30px;
   // box-sizing: border-box;
   // -webkit-box-sizing: border-box;
-  border-radius: 5px;
   @include webkit(box-sizing, border-box);
+  border-radius: 5px;
+  
 }
 .open{
   .main-content{padding-left: $navMenu + 30px;}
