@@ -1,6 +1,6 @@
 <template>
   <div id="header-wrap">
-    <div class="pull-left header-icon"><svg-icon iconClass="menu" className="menu"></svg-icon></div>
+    <div class="pull-left header-icon" @click="navMenuState"><svg-icon iconClass="menu" className="menu"></svg-icon></div>
     <div class="pull-right">
       <div class="pull-left header-icon img-wrap"><img class="img-size" src="../../../assets/head.jpg" alt=""></div>
       <div class="pull-left user-info header-icon">管理员</div>
@@ -14,7 +14,15 @@ import SvgIcon from '../../../icon/SvgIcon.vue'
 export default {
   name: '',
   components: {SvgIcon},
-  setup () {},
+  setup (props, context) {
+    const navMenuState = ()=>{
+      context.root.$store.commit('SET_COLLAPSE');
+    }
+    return {
+      navMenuState,
+      
+    }
+  },
 }
 </script>
 <style  scoped lang="scss" >
@@ -26,10 +34,13 @@ export default {
   left: $navMenu;
   height: 75px;
   background-color: #fff;
-  box-shadow:0, 3px, 16px, 0 rgba(0,0,0,0.1);
-  -webkit-box-shadow:0 3px 16px 0 rgba(0,0,0,0.1);
-  z-index: 99;
+  // box-shadow:0, 3px, 16px, 0 rgba(0,0,0,0.1);
+  // -webkit-box-shadow:0 3px 16px 0 rgba(0,0,0,0.1);
+  @include webkit(box-shadow, 0 3px 16px 0 rgba(0,0,0,0.1));
+  // z-index: 99;
   line-height: 75px;
+  @include webkit(box-sizing, border-box);
+  @include webkit(transition, all .3s ease 0s);
 }
 .svg-icon{
   color:black;
@@ -64,5 +75,6 @@ export default {
   width:30px;
   border-radius: 50%;
 }
-
+.open{#header-wrap{left: $navMenu;}}
+.close{#header-wrap{left: $navMenu-min}}
 </style>

@@ -4,8 +4,6 @@
     <el-menu
       default-active="1-4-1"
       class="el-menu-vertical-demo"
-      @open="handleOpen"
-      @close="handleClose"
       :collapse="isCollapse"
       text-color="#fff"
       background-color="transparent"
@@ -38,25 +36,20 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { reactive, ref, isRef, toRefs, onMounted } from "@vue/composition-api";
+import { reactive, ref, isRef, toRefs, onMounted, computed } from "@vue/composition-api";
 import SvgIcon from '../../../icon/SvgIcon.vue';
 export default {
   name: "navMenu",
   components: {SvgIcon},
   setup(props, { root }) {
     // data 数据 ------------------------------------------------------------ data 数据
-    const isCollapse = ref(false);
-    // const routers = reactive(root.$router.options.routers);
     const routers = reactive(root.$router.options.routes);
-    console.log(routers);
+    // console.log(routers);
 
     // 函数 ----------------------------------------------------------------- 函数
-    const handleOpen = (key, keyPath) => {
-      console.log(key, keyPath);
-    };
-    const handleClose = (key, keyPath) => {
-      console.log(key, keyPath);
-    };
+
+    // computed 监听--------------------------------------------------------- 监听
+    const isCollapse = computed(()=> root.$store.state.isCollapse);
 
     // 挂载 ----------------------------------------------------------------- 挂载
 
@@ -66,8 +59,8 @@ export default {
       isCollapse,
       routers,
       // 函数
-      handleOpen,
-      handleClose,
+
+      
     };
   },
 };
@@ -81,6 +74,8 @@ export default {
   width: $navMenu;
   height: 100vh;
   background-color: #344a5f;
+  @include webkit(transition, all .3s ease 0s);
+  @include webkit(box-sizing, border-box);
 }
 .logo{
   text-align: center;
@@ -89,5 +84,11 @@ export default {
     margin:28px auto 25px;
     // margin-top: 10px;
   }
+}
+.open{
+  #nav-wrap {width: $navMenu;}
+}
+.close{
+  #nav-wrap {width: $navMenu-min;}
 }
 </style>

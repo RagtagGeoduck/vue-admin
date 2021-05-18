@@ -32,17 +32,24 @@ export default {
   width:100%;
   height:100%;
   padding:$LayoutHeader + 30px 30px 0 $navMenu + 30px;
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-
+  // box-sizing: border-box;
+  // -webkit-box-sizing: border-box;
+  @include webkit(transition, all .3s ease 0s);
 }
 .content{
   width:100%;
   height:100%;
   background-color: #fff;
   padding:30px 30px 0 30px;
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
+  // box-sizing: border-box;
+  // -webkit-box-sizing: border-box;
   border-radius: 5px;
+  @include webkit(box-sizing, border-box);
+}
+.open{
+  .main-content{padding-left: $navMenu + 30px;}
+}
+.close{
+  .main-content{padding-left: $navMenu-min + 30px}
 }
 </style>
