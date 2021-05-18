@@ -224,6 +224,8 @@ export default {
       menuTab.forEach((element) => {
         element.current = false;
       });
+      data.current = true;
+      // console.log(data);
       // 重置按钮的禁用状态
       resetButtonStatus({
         codeBtnStatus:true,
@@ -294,7 +296,6 @@ export default {
           // 验证成功后的操作
           // alert("submit!");
           model.value === "login" ? login() : register();
-
           // 模拟注册成功
           // toggleMenu(menuTab[0]);
           // clearCountDown();
