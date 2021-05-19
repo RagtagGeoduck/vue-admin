@@ -9,7 +9,8 @@ const whiteRouter = ['/login'];
 router.beforeEach((to, from, next)=>{
     console.log(to);
     if(getToken()){
-        console.log('存在');
+        next();
+        console.log('存在token');
     }else{
         if(whiteRouter.indexOf(to.path) !== -1){
             next();

@@ -346,7 +346,7 @@ export default {
         password : sha1(ruleForm.password),
         code : ruleForm.code
       };
-      context.root.$store.dispatch('login', requestData).then((response)=>{
+      context.root.$store.dispatch('app/login', requestData).then((response)=>{
         let data = response.data
         alert(`${data.message} + 正在跳转页面`);
         console.log(data);
