@@ -49,7 +49,7 @@ export default {
     // 函数 ----------------------------------------------------------------- 函数
 
     // computed 监听--------------------------------------------------------- 监听
-    const isCollapse = computed(()=> root.$store.state.isCollapse);
+    const isCollapse = computed(()=> root.$store.state.app.isCollapse);
 
     // 挂载 ----------------------------------------------------------------- 挂载
 

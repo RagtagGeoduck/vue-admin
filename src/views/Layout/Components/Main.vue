@@ -2,6 +2,7 @@
   <div id="main-wrap">
     <div class="main-content">
       <div class="content">
+        {{bbbb}}
         <router-view></router-view>
       </div>
     </div>
@@ -12,7 +13,14 @@
 export default {
   name: '',
   components: {},
-  setup () {},
+  setup (props, context) {
+    const bbbb = context.root.$store.state.login.aaaa;
+
+
+    return {
+      bbbb
+    }
+  },
 }
 </script>
 <style  scoped lang="scss" >

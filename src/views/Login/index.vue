@@ -346,8 +346,7 @@ export default {
         password : sha1(ruleForm.password),
         code : ruleForm.code
       };
-      Login(requestData)
-      .then((response)=>{
+      context.root.$store.dispatch('login', requestData).then((response)=>{
         let data = response.data
         alert(`${data.message} + 正在跳转页面`);
         console.log(data);
@@ -359,6 +358,19 @@ export default {
         console.log('登陆失败');
         console.log(error);
       })
+      // Login(requestData)
+      // .then((response)=>{
+      //   let data = response.data
+      //   alert(`${data.message} + 正在跳转页面`);
+      //   console.log(data);
+      //   context.root.$router.push({
+      //     path:"/console"
+      //   })
+      // }).catch(error=>{
+      //   console.log(requestData.code);
+      //   console.log('登陆失败');
+      //   console.log(error);
+      // })
     };
     // 函数 - 表单创建
     const register = () => {

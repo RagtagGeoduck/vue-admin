@@ -17,7 +17,7 @@ export default {
   name: '',
   components: {LayoutHeader,LayoutNav,LayoutMain},
   setup (props, context) {
-    const menuStatus = computed(()=> context.root.$store.state.isCollapse)
+    const menuStatus = computed(()=> context.root.$store.state.app.isCollapse)
 
     return{
       menuStatus
