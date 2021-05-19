@@ -16,12 +16,11 @@ export default {
   components: {SvgIcon},
   setup (props, context) {
     const navMenuState = ()=>{
-      context.root.$store.commit('SET_COLLAPSE');
+      context.root.$store.commit('app/SET_COLLAPSE');
       // context.root.$store.dispatch('testAction');
     }
     return {
       navMenuState,
-      
     }
   },
 }

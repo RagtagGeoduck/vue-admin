@@ -28,7 +28,7 @@ export default new Router({
     {
       path: "/console",
       name: "Console",
-      redirect: "InfoIndex",
+      redirect: "index",
       meta:{
         name: "控制台",
         icon: "el-icon-odometer",
