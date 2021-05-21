@@ -3,24 +3,40 @@
     <div class="pull-left header-icon" @click="navMenuState"><svg-icon iconClass="menu" className="menu"></svg-icon></div>
     <div class="pull-right">
       <div class="pull-left header-icon img-wrap"><img class="img-size" src="../../../assets/head.jpg" alt=""></div>
-      <div class="pull-left user-info header-icon">管理员</div>
-      <div class="pull-left header-icon"><svg-icon iconClass="power" className="power"></svg-icon></div>
+      <div class="pull-left user-info header-icon">{{username}}</div>
+      <div class="pull-left header-icon" @click="exit"><svg-icon iconClass="power" className="power" ></svg-icon></div>
     </div>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
+import { computed } from '@vue/composition-api'
 import SvgIcon from '../../../icon/SvgIcon.vue'
 export default {
   name: '',
   components: {SvgIcon},
   setup (props, context) {
+    const username = computed(()=>context.root.$store.state.app.username);
     const navMenuState = ()=>{
       context.root.$store.commit('app/SET_COLLAPSE');
       // context.root.$store.dispatch('testAction');
+    };
+
+    // 函数 -------------------------------------------------- 函数 ⬇️
+    const exit = () =>{
+      context.root.$store.dispatch('app/exit').then(()=>{
+        context.root.$router.push({
+          name: 'Login',
+        })
+      })
     }
+    // 函数 -------------------------------------------------- 函数 ⬆️
+
     return {
       navMenuState,
+      username,
+      // function -------------------------------------------------- function
+      exit,
     }
   },
 }

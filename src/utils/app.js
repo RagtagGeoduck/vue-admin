@@ -18,3 +18,13 @@ export function setUsername(username){
 export function getUsername(){
     return cookie.get(usernameKey);
 }
+
+// 移除token
+export function removeToken(){
+    return cookie.remove(adminToken);
+}
+
+// 移除 username
+export function removeUsername(){
+    return cookie.remove(usernameKey);
+}

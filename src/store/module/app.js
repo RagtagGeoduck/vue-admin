@@ -1,11 +1,14 @@
 import {Login} from '@/api/login'
-import {getUsername, setUsername, setToken} from '@/utils/app'
+import {getUsername, setUsername, setToken, removeToken, removeUsername} from '@/utils/app'
+import { resolve } from 'core-js/fn/promise'
+
 // 提取（19学时）
 const state ={
     isCollapse: JSON.parse(sessionStorage.getItem("isCollapse")) || false,
     count: 10,
     token : '',
-    username : getUsername || '',
+    // username: 
+    username : getUsername() || '',
     
 }
 const getters ={
@@ -19,6 +22,15 @@ const mutations ={
     SET_COUNT(state, value) {
         state.count += value
     },
+    // 移除 state 內的 token
+    // RM_USERNAME(){
+
+    // },
+    // // 移除 state 內的 username
+    // RM_TOKEN(){
+
+    // },
+
     // 设置username && token ----------------------------------------- 设置username && token 开始⬇️
     SET_USERNAME(state, value){
         state.username = value;
@@ -48,7 +60,16 @@ const actions = {
                 reject(error)
             })
         })
-    }
+    },
+    exit(content){
+        return new Promise((resolve, reject)=>{
+            removeToken();
+            removeUsername();
+            content.commit('SET_USERNAME', '');
+            content.commit('SET_TOKEN', '');
+            resolve();
+        })
+    },
 }
 export default {
     namespaced: true,

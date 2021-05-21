@@ -1,6 +1,8 @@
 import router from './index'
 
-import {getToken} from '@/utils/app'
+import {getToken, removeToken, removeUsername} from '@/utils/app'
+import store from '@/store/index'
+
 
 // 创建白名单
 const whiteRouter = ['/login'];
@@ -9,8 +11,18 @@ const whiteRouter = ['/login'];
 router.beforeEach((to, from, next)=>{
     console.log(to);
     if(getToken()){
-        next();
-        console.log('存在token');
+        if(to.path == '/login'){
+            removeToken();
+            removeUsername();
+            // 移除 store中state的数据
+            store.commit('app/SET_USERNAME', '');
+            store.commit('app/SET_TOKEN', '');
+            next();
+        }else{
+            console.log('存在token');
+            next();
+        
+        }
     }else{
         if(whiteRouter.indexOf(to.path) !== -1){
             next();
