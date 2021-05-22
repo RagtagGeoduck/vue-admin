@@ -1,0 +1,24 @@
+/*
+    后台框架尺寸
+*/
+
+// nav宽度
+$navMenu:250px;
+// nav收缩宽度
+$navMenu-min:64px;
+// header高度
+$LayoutHeader:70px;
+
+
+// 主色调
+$mainColor: #f56c6c;
+
+
+// 封装兼容
+@mixin webkit($type, $value){
+    -webkit-#{$type}: $value;
+    -moz-#{$type}: $value;
+    -o-#{$type}: $value;
+    -ms-#{$type}: $value;
+    #{$type}: $value;
+}
