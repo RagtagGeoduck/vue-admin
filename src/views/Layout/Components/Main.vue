@@ -2,7 +2,7 @@
   <div id="main-wrap">
     <div class="main-content">
       <div class="content">
-        {{bbbb}}
+        <!-- {{bbbb}} -->
         <router-view></router-view>
       </div>
     </div>
@@ -14,11 +14,11 @@ export default {
   name: '',
   components: {},
   setup (props, context) {
-    const bbbb = context.root.$store.state.login.aaaa;
+    // const bbbb = context.root.$store.state.login.aaaa;
 
 
     return {
-      bbbb
+      // bbbb
     }
   },
 }
