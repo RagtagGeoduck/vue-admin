@@ -107,7 +107,8 @@
     </el-row>
 
     <!-- 引入Dialog组件 -->
-    <DialogInfo :flag.sync="dialog_switch" @close="closeDialog"/>
+    <!-- <DialogInfo :flag.sync="dialog_switch" @close="closeDialog"/> -->
+    <DialogInfo :flag.sync="dialog_switch"/>
 
      <!-- <el-dialog title="收货地址" :visible.sync="dialog_switch">
        test
@@ -127,7 +128,7 @@ export default {
   components: {DialogInfo},
   setup(props) {
     // 数据 ---------------------------------------------------------------开始
-    const dialog_switch = ref(true);
+    const dialog_switch = ref(false);
 
     const formInline = ref("");
 
