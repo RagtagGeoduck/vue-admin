@@ -6,7 +6,7 @@
         <div class="label-wrap category">
           <label for="">类型</label>
           <div class="wrap-content">
-            <el-select v-model="value" placeholder="请选择" style="width: 100%">
+            <el-select v-model="categoryValue" placeholder="请选择" style="width: 100%">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -25,7 +25,7 @@
           <div class="wrap-content">
             <el-date-picker
               style="width: 100%"
-              v-model="value1"
+              v-model="dateValue"
               type="datetimerange"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
@@ -64,7 +64,7 @@
       </el-col>
       <el-col :span="3">&nbsp;</el-col>
       <el-col :span="2">
-        <el-button type="danger" style="width: 100%">新增</el-button>
+        <el-button type="danger" style="width: 100%" @click="dialog_switch = true">新增</el-button>
       </el-col>
     </el-row>
     <!-- </el-form> -->
@@ -89,10 +89,10 @@
     <div class="blank_space_30"></div>
     <!-- 表格 ----------------------------------------------------------------------结束-->
     <el-row>
-      <el-col span="12">
+      <el-col :span="12">
         <el-button>批量删除</el-button>
       </el-col>
-      <el-col span="12">
+      <el-col :span="12">
         <el-pagination
           background
           layout="total, sizes, prev, pager, next, jumper"
@@ -105,19 +105,33 @@
         </el-pagination>
       </el-col>
     </el-row>
+
+    <!-- 引入Dialog组件 -->
+    <DialogInfo :flag.sync="dialog_switch" @close="closeDialog"/>
+
+     <!-- <el-dialog title="收货地址" :visible.sync="dialog_switch">
+       test
+     </el-dialog> -->
   </div>
+
 </template>
 
 <script type="text/ecmascript-6">
 import "../../styles/config.scss";
+import DialogInfo from './dialog/info'
 import { ref, reactive } from "@vue/composition-api";
+
+
 export default {
   name: "infoIndex",
-  components: {},
-  setup(props, context) {
+  components: {DialogInfo},
+  setup(props) {
     // 数据 ---------------------------------------------------------------开始
+    const dialog_switch = ref(true);
 
     const formInline = ref("");
+
+
     const options = reactive([
       {
         value: 1,
@@ -158,8 +172,8 @@ export default {
       { value: "title", label: "标题" },
     ]);
 
-    const value = ref("");
-    const value1 = ref("");
+    const categoryValue = ref("");
+    const dateValue = ref("");
     const search_key = ref("id");
     const search_keyword = ref("");
     // 数据 ---------------------------------------------------------------结束
@@ -173,20 +187,25 @@ export default {
       console.log(val)
     }
 
+    const closeDialog = () =>{
+      dialog_switch.value = flase;
+
+    }
+
     return {
-      // 数据
+      // ref数据
+      dialog_switch,
       tableData,
       formInline,
       options,
       SearchOptions,
-      value,
-      value1,
+      categoryValue,
+      dateValue,
       search_key,
       search_keyword,
 
       // 函数
-      handleSizeChange,
-      handleCurrentChange
+      handleSizeChange, handleCurrentChange, closeDialog
 
     };
   },
