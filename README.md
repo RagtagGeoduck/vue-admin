@@ -27,4 +27,6 @@ npm run lint
 ### Test
 ```
 on the new Mac
+
+on the MacBook Pro
 ```
