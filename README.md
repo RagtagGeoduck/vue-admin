@@ -28,5 +28,4 @@ npm run lint
 ```
 on the new Mac
 
-on the MacBook Pro
 ```
