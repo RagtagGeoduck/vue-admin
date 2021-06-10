@@ -81,7 +81,7 @@
       </el-table-column>
       <el-table-column label="操作">
         <template>
-          <el-button type="danger" size="mini">删除</el-button>
+          <el-button type="danger" size="mini" >删除</el-button>
           <el-button type="success" size="mini">编辑</el-button>
         </template>
       </el-table-column>
@@ -90,7 +90,7 @@
     <!-- 表格 ----------------------------------------------------------------------结束-->
     <el-row>
       <el-col :span="12">
-        <el-button>批量删除</el-button>
+        <el-button @click="deleteAll">批量删除</el-button>
       </el-col>
       <el-col :span="12">
         <el-pagination
@@ -121,8 +121,8 @@
 import "../../styles/config.scss";
 import DialogInfo from './dialog/info'
 import { ref, reactive } from "@vue/composition-api";
-
-
+import {global } from '@/utils/global_V3.0'
+ 
 export default {
   name: "infoIndex",
   components: {DialogInfo},
@@ -132,6 +132,7 @@ export default {
 
     const formInline = ref("");
 
+    const {confirm} = global();
 
     const options = reactive([
       {
@@ -179,7 +180,22 @@ export default {
     const search_keyword = ref("");
     // 数据 ---------------------------------------------------------------结束
 
-    // 函数
+    // 函数 ---------------------------------------------------------------开始
+
+    // 删除所有
+    const deleteAll = () =>{
+      confirm({
+        content:'确定删除选择的内容吗, 删除后不可恢复',
+        tip: "警告",
+        fn: confirmDelete,
+        id: 'confirmID:111'
+      })
+    }
+
+    const confirmDelete = () => {
+      alert('111');
+    }
+
     const handleSizeChange = (val) => {
       console.log(val)
     }
@@ -206,7 +222,7 @@ export default {
       search_keyword,
 
       // 函数
-      handleSizeChange, handleCurrentChange, closeDialog
+      handleSizeChange, handleCurrentChange, closeDialog, deleteAll
 
     };
   },
