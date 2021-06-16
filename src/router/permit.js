@@ -19,7 +19,7 @@ router.beforeEach((to, from, next)=>{
             store.commit('app/SET_TOKEN', '');
             next();
         }else{
-            console.log('存在token');
+            // console.log('存在token');
             next();
         
         }
