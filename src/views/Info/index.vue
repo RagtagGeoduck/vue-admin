@@ -81,7 +81,7 @@
       </el-table-column>
       <el-table-column label="操作">
         <template>
-          <el-button type="danger" size="mini" >删除</el-button>
+          <el-button type="danger" size="mini" @click="deleteItem">删除</el-button>
           <el-button type="success" size="mini">编辑</el-button>
         </template>
       </el-table-column>
@@ -181,6 +181,17 @@ export default {
     // 数据 ---------------------------------------------------------------结束
 
     // 函数 ---------------------------------------------------------------开始
+    const deleteItem = () =>{
+      // alert('deleteItem');
+      // return false;
+      confirm({
+        content:"确定删除该条信息吗, 删除后不可恢复",
+        tip: "警告",
+        fn: confirmDelete,
+        id: "1"
+      })
+    }
+
 
     // 删除所有
     const deleteAll = () =>{
@@ -222,7 +233,7 @@ export default {
       search_keyword,
 
       // 函数
-      handleSizeChange, handleCurrentChange, closeDialog, deleteAll
+      handleSizeChange, handleCurrentChange, closeDialog, deleteAll, deleteItem
 
     };
   },

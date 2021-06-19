@@ -35,7 +35,7 @@
         <el-form-item prop="password" class="item-form">
           <label>密码</label>
           <el-input
-            type="text"
+            type="password"
             v-model="ruleForm.password"
             autocomplete="off"
             minlength="6"
