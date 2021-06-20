@@ -9,7 +9,7 @@ const whiteRouter = ['/login'];
 
 // 路由守卫
 router.beforeEach((to, from, next)=>{
-    console.log(to);
+    // console.log(to);
     if(getToken()){
         if(to.path == '/login'){
             removeToken();
@@ -28,7 +28,7 @@ router.beforeEach((to, from, next)=>{
             next();
         }else{
             next('/login');
-            console.log('不存在')
+            // console.log('不存在')
         }
     }
 })

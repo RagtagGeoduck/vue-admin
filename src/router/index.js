@@ -3,6 +3,11 @@ import Router from "vue-router";
 import Login from '../views/Login/index.vue'
 import Layout from '../views/Layout'
 
+
+const originalReplace = Router.prototype.push
+Router.prototype.push = function push(location) {
+  return originalReplace.call(this, location).catch(err => err)
+}
 Vue.use(Router);
 
 export default new Router({
@@ -18,7 +23,7 @@ export default new Router({
     },
     {
       path: "/login",
-      name: "login",
+      name: "Login",
       hidden:true,
       meta:{
         name: "登陆",

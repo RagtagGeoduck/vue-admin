@@ -1,17 +1,17 @@
 <template>
   <div id="category">
-    <el-button type="danger">添加一级分类</el-button>
+    <el-button type="danger"  @click="addFirstCategoryStatus">添加一级分类</el-button>
     <hr class="hr-e9e9e9" />
     <div>
       <el-row :gutter="20">
         <!-- 分类栏 -->
         <el-col :span="8">
           <div class="category_wrap">
-            <div class="category">
+            <div class="category" v-for="firstItem in category.item" :key='firstItem.id'>
               <!-- 一级分类 -->
               <h4>
                 <svg-icon icon-class="plus"></svg-icon>
-                一级分类-名称
+                {{firstItem.category_name}}
                 <div class="button-group">
                   <el-button type="danger" size="mini" round>编辑</el-button>
                   <el-button type="success" size="mini" round>添加子级</el-button>
@@ -19,65 +19,15 @@
                 </div>
               </h4 >
               <!-- 子集分类 -->
-              <ul>
-                <li>
-                  子集分类-名称
-                  <div class="button-group">
-                    <el-button size="mini" type="danger" round>编辑</el-button>
-                    <el-button size="mini" round>删除</el-button>
-                  </div>
-                </li>
-                <li>
-                  子集分类-名称
-                  <div class="button-group">
-                    <el-button size="mini" type="danger" round>编辑</el-button>
-                    <el-button size="mini" round>删除</el-button>
-                  </div>
-                </li>
-                <li>
-                  子集分类-名称
+              <ul v-if="firstItem.children">
+                <li v-for="childItem in firstItem.children" :key="childItem.id">
+                  {{childItem.category_name}}
                   <div class="button-group">
                     <el-button size="mini" type="danger" round>编辑</el-button>
                     <el-button size="mini" round>删除</el-button>
                   </div>
                 </li>
               </ul>
-              <!-- 一级分类 -->
-              <h4>
-                <svg-icon icon-class="plus"></svg-icon>
-                一级分类-名称
-                <div class="button-group">
-                  <el-button type="danger" size="mini" round>编辑</el-button>
-                  <el-button type="success" size="mini" round>添加子级</el-button>
-                  <el-button size="mini" round>删除</el-button>
-                </div>
-              </h4 >
-              <!-- 子集分类 -->
-              <ul>
-                <li>
-                  子集分类-名称
-                  <div class="button-group">
-                    <el-button size="mini" type="danger" round>编辑</el-button>
-                    <el-button size="mini" round>删除</el-button>
-                  </div>
-                </li>
-                <li>
-                  子集分类-名称
-                  <div class="button-group">
-                    <el-button size="mini" type="danger" round>编辑</el-button>
-                    <el-button size="mini" round>删除</el-button>
-                  </div>
-                </li>
-                <li>
-                  子集分类-名称
-                  <div class="button-group">
-                    <el-button size="mini" type="danger" round>编辑</el-button>
-                    <el-button size="mini" round>删除</el-button>
-                  </div>
-                </li>
-              </ul>
-
-              
             </div>
           </div>
         </el-col>
@@ -85,15 +35,15 @@
         <!-- 表单 -->
         <el-col :span="16">
           <h4 class="menu-title">一级分类编辑</h4>
-          <el-form :label-position="labelPosition" label-width="142px" :model="formLabelAlign" class="form-wrap">
-            <el-form-item label="名称">
-              <el-input v-model="formLabelAlign.name"></el-input>
+          <el-form :label-position="labelPosition" label-width="142px" :model="form" class="form-wrap">
+            <el-form-item label="一级分类名称" v-if="category_first_input">
+              <el-input v-model="form.firstCategoryName"></el-input>
             </el-form-item>
-            <el-form-item label="活动区域">
-              <el-input v-model="formLabelAlign.region"></el-input>
+            <el-form-item label="二级分类名称" v-if="category_children_input">
+              <el-input v-model="form.childrenCategoryName"></el-input>
             </el-form-item>
-            <el-form-item label="活动形式">
-              <el-input v-model="formLabelAlign.type"></el-input>
+            <el-form-item>
+              <el-button type="danger" @click="submit" :disabled="submit_button_disable">确定</el-button>
             </el-form-item>
         </el-form>
         </el-col>
@@ -104,25 +54,80 @@
 </template>
 
 <script type="text/ecmascript-6">
-import { reactive } from '@vue/composition-api';
+import { reactive, ref, onMounted } from '@vue/composition-api';
+import {addFirstCategory} from '@/api/news';
 export default {
   name: '',
   components: {},
-  setup (props) {
+  setup (props, context) {
     // data 数据
     const labelPosition = 'right';
-    const formLabelAlign = reactive({
-          name: '',
-          region: '',
-          type: ''
+    const form = reactive({
+          firstCategoryName: '',
+          childrenCategoryName: '',
         })
+    const category_first_input = ref(true);
+    const category_children_input = ref(true);
 
+    // data - 按钮
+    const submit_button_type = ref('');
+    const submit_button_disable = ref(true);
 
+    const category = reactive({
+      item:[
+        {
+          id:'1',
+          category_name:"一级分类-1"
+        },
+        {
+          id:"2",
+          category_name:'一级分类-2',
+          children:[
+            {
+              id:"4",
+              category_name:'二级分类=1'
+            },
+            {
+              id:"5",
+              category_name:'二级分类=2'
+            },
+          ]
+        }
+      ]
+    })
+
+    // method 方法 ----------------------------------------------------------------------开始
+    const addFirstCategoryStatus = () =>{
+      category_first_input.value = true;
+      category_children_input.value = false;
+    }
+
+    // method - submit提交表单
+    const submit = () => {
+
+    }
+
+    // method-submit-添加一级分类
+    const addFirstCategory = () => {
+      alert('addFirstCategory');
+      if(!form.categoryFirstName.trim()){
+        context.root.$message({
+          message:'一级分类不能为空',
+          type:'error'
+        })
+        return false;
+      }
+    }
+    // method 方法 ----------------------------------------------------------------------结束
 
     // return 返回
     return {
       // data 数据-return
-      labelPosition, formLabelAlign
+      labelPosition, form, category_first_input, category_children_input, submit_button_type, submit_button_disable,
+      category,
+      // method 方法
+      addFirstCategoryStatus, submit,
+      addFirstCategory, 
     }
   }
 }
