@@ -441,6 +441,9 @@ export default {
 };
 </script>
 <style  scoped lang="scss">
+*{
+  overflow: hidden;
+}
 #login {
   height: 100vh;
   background-color: #344a5f;
