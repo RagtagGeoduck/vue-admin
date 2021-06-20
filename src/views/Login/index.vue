@@ -442,7 +442,7 @@ export default {
 </script>
 <style  scoped lang="scss">
 *{
-  overflow: hidden;
+  // overflow: hidden;
 }
 #login {
   height: 100vh;
@@ -451,6 +451,7 @@ export default {
 .login-wrap {
   width: 330px;
   margin: auto;
+  margin-top: -20px;
 }
 .menu-tab {
   text-align: center;

@@ -31,19 +31,34 @@
             </div>
           </div>
         </el-col>
-        
+
         <!-- 表单 -->
         <el-col :span="16">
           <h4 class="menu-title">一级分类编辑</h4>
-          <el-form :label-position="labelPosition" label-width="142px" :model="form" class="form-wrap">
-            <el-form-item label="一级分类名称" v-if="category_first_input">
+          <el-form 
+            :label-position="labelPosition"
+            label-width="142px"
+            :model="form"
+            class="form-wrap"
+            ref="categoryForm">
+            <el-form-item
+              label="一级分类名称"
+              v-if="category_first_input"
+              prop="firstCategoryName"
+            >
               <el-input v-model="form.firstCategoryName"></el-input>
             </el-form-item>
-            <el-form-item label="二级分类名称" v-if="category_children_input">
+            <el-form-item label="二级分类名称" v-if="category_children_input" prop="childrenCategoryName">
               <el-input v-model="form.childrenCategoryName"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="danger" @click="submit" :disabled="submit_button_disable">确定</el-button>
+              <el-button 
+                type="danger"
+                @click="submit"
+                :disabled="submit_button_disable"
+                :loading="submit_button_loading"
+                >确定</el-button
+              >
             </el-form-item>
         </el-form>
         </el-col>
@@ -55,7 +70,7 @@
 
 <script type="text/ecmascript-6">
 import { reactive, ref, onMounted } from '@vue/composition-api';
-import {addFirstCategory} from '@/api/news';
+import {AddFirstCategory, GetCategory} from '@/api/news';
 export default {
   name: '',
   components: {},
@@ -71,7 +86,8 @@ export default {
 
     // data - 按钮
     const submit_button_type = ref('');
-    const submit_button_disable = ref(true);
+    const submit_button_disable = ref(false);
+    const submit_button_loading = ref(false);
 
     const category = reactive({
       item:[
@@ -99,40 +115,79 @@ export default {
     // method 方法 ----------------------------------------------------------------------开始
     const addFirstCategoryStatus = () =>{
       category_first_input.value = true;
-      category_children_input.value = false;
+      category_children_input.value = true;
     }
 
     // method - submit提交表单
     const submit = () => {
-
+      addFirstCategory();
     }
 
     // method-submit-添加一级分类
     const addFirstCategory = () => {
-      alert('addFirstCategory');
-      if(!form.categoryFirstName.trim()){
+      // alert('addFirstCategory');
+      if(!form.firstCategoryName.trim()){
         context.root.$message({
           message:'一级分类不能为空',
           type:'error'
         })
         return false;
       }
+      submit_button_loading.value = true;
+      AddFirstCategory({categoryName: form.firstCategoryName}).then(response => {
+        let data = response.data;
+        // console.log(data)
+        if(data.resCode === 0){
+          context.root.$message({
+            message: data.message,
+            type: "success"
+          })
+          category.item.push(data.data)   // 直接push到列表中
+        }
+        // getCategory();  // 调用接口刷新界面，缺点: 消耗资源
+        submit_button_loading.value = false;
+        context.refs.categoryForm.resetFields();
+      }).catch(error => {
+        console.log(error);
+        submit_button_loading.value = true;
+        context.refs.categoryForm.resetFields();
+      })
+    }
+
+    // method-category-获取分类
+    const getCategory = () => {
+      GetCategory({}).then(response =>{
+        console.log(response);
+        let data = response.data.data;
+        category.item = data;
+
+      }).catch(error =>{
+        console.log(error)
+      })
     }
     // method 方法 ----------------------------------------------------------------------结束
+  
+    /*
+       生命周期
+    */
+    onMounted(()=>{
+      getCategory();
+    })
 
     // return 返回
     return {
       // data 数据-return
-      labelPosition, form, category_first_input, category_children_input, submit_button_type, submit_button_disable,
+      labelPosition, form, category_first_input, category_children_input, 
+      submit_button_type, submit_button_disable,submit_button_loading,
       category,
       // method 方法
       addFirstCategoryStatus, submit,
-      addFirstCategory, 
+      addFirstCategory, getCategory,
     }
   }
 }
 </script>
-<style  scoped lang="scss" >
+<style scoped lang="scss">
 @import "@/styles/config.scss";
 
 .category_wrap{

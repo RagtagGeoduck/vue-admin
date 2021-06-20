@@ -28,3 +28,9 @@ export function validateCOD(code){
     let reg = /^[a-z0-9]{6}$/;
     return !reg.test(code)? true:false;
 }
+
+// export function validateEmail(){}
+
+// export function validatePass(){}
+
+// export function validateVCode(){}
