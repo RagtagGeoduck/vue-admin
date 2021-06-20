@@ -6,7 +6,11 @@
         <div class="label-wrap category">
           <label for="">类型</label>
           <div class="wrap-content">
-            <el-select v-model="categoryValue" placeholder="请选择" style="width: 100%">
+            <el-select
+              v-model="categoryValue"
+              placeholder="请选择"
+              style="width: 100%"
+            >
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -64,7 +68,12 @@
       </el-col>
       <el-col :span="3">&nbsp;</el-col>
       <el-col :span="2">
-        <el-button type="danger" style="width: 100%" @click="dialog_switch = true">新增</el-button>
+        <el-button
+          type="danger"
+          style="width: 100%"
+          @click="dialog_switch = true"
+          >新增</el-button
+        >
       </el-col>
     </el-row>
     <!-- </el-form> -->
@@ -73,7 +82,8 @@
     <div class="blank_space_30"></div>
     <el-table :data="tableData" border style="width: 100%">
       <el-table-column type="selection" width="40"> </el-table-column>
-      <el-table-column prop="title" label="标题" width="830"> </el-table-column>
+      <el-table-column prop="title" label="标题" width="650px">
+      </el-table-column>
       <el-table-column prop="category" label="类别" width="130">
       </el-table-column>
       <el-table-column prop="date" label="日期" width="237"> </el-table-column>
@@ -81,8 +91,11 @@
       </el-table-column>
       <el-table-column label="操作">
         <template>
-          <el-button type="danger" size="mini" @click="deleteItem">删除</el-button>
+          <el-button type="danger" size="mini" @click="deleteItem"
+            >删除</el-button
+          >
           <el-button type="success" size="mini">编辑</el-button>
+          <el-button type="success" size="mini">编辑详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -108,13 +121,12 @@
 
     <!-- 引入Dialog组件 -->
     <!-- <DialogInfo :flag.sync="dialog_switch" @close="closeDialog"/> -->
-    <DialogInfo :flag.sync="dialog_switch"/>
+    <DialogInfo :flag.sync="dialog_switch" />
 
-     <!-- <el-dialog title="收货地址" :visible.sync="dialog_switch">
+    <!-- <el-dialog title="收货地址" :visible.sync="dialog_switch">
        test
      </el-dialog> -->
   </div>
-
 </template>
 
 <script type="text/ecmascript-6">
@@ -122,11 +134,11 @@ import "../../styles/config.scss";
 import DialogInfo from './dialog/info'
 import { ref, reactive } from "@vue/composition-api";
 import {global } from '@/utils/global_V3.0'
- 
+
 export default {
   name: "infoIndex",
   components: {DialogInfo},
-  setup(props) {
+  setup() {
     // 数据 ---------------------------------------------------------------开始
     const dialog_switch = ref(false);
 
@@ -216,7 +228,7 @@ export default {
     }
 
     const closeDialog = () =>{
-      dialog_switch.value = flase;
+      dialog_switch.value = false;
 
     }
 
@@ -239,7 +251,7 @@ export default {
   },
 };
 </script>
-<style  scoped lang="scss" >
+<style scoped lang="scss">
 .el-row {
   margin-bottom: 20px;
   &:last-child {

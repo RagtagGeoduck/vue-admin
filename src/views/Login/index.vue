@@ -97,7 +97,7 @@
 <script type="text/ecmascript-6">
 // import axios from 'axios'
 import sha1 from 'js-sha1'
-import { GetSms, Register, Login } from "@/api/login";
+import { GetSms, Register,} from "@/api/login";
 import { reactive, ref, onMounted } from "@vue/composition-api";
 import {
   stripscript,
@@ -334,7 +334,7 @@ export default {
       // 还原 验证码按钮 默认状态
       codeButtonStatus.status = false;
       codeButtonStatus.value = "获取验证码";
-      
+
       // 清除定时器
       clearInterval(timer.value);
     };
@@ -402,7 +402,7 @@ export default {
     }
 
     // 函数 - 更新 获取验证码 按钮样式（数字变化,文字显示）
-    const updateBtnStatus = (params) =>{  
+    const updateBtnStatus = (params) =>{
       codeButtonStatus.status = params.codeBtnStatus,
       codeButtonStatus.text = params.codeBtnStatusText
     }
@@ -440,10 +440,7 @@ export default {
   },
 };
 </script>
-<style  scoped lang="scss">
-*{
-  // overflow: hidden;
-}
+<style scoped lang="scss">
 #login {
   height: 100vh;
   background-color: #344a5f;
