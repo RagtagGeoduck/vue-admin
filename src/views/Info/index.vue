@@ -210,13 +210,17 @@ export default {
       confirm({
         content:'确定删除选择的内容吗, 删除后不可恢复',
         tip: "警告",
-        fn: confirmDelete,
+        fn: confirmDeleteAll,
         id: 'confirmID:111'
       })
     }
 
     const confirmDelete = () => {
-      alert('111');
+      alert('function:confirmDelete');
+    }
+
+    const confirmDeleteAll = () => {
+      alert('function:confirmDeleteAll');
     }
 
     const handleSizeChange = (val) => {
