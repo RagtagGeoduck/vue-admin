@@ -13,8 +13,9 @@ import service from "@/utils/request";
 */
 
 /*
-    删除
+    删除一级分类
 */
+
 
 /*
     添加一级分类

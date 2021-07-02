@@ -54,6 +54,7 @@
               label="一级分类名称"
               v-if="category_first_input"
               prop="firstCategoryName"
+              :disabled="category_first_disabled"
             >
               <el-input v-model="form.firstCategoryName"></el-input>
             </el-form-item>
@@ -61,6 +62,7 @@
               label="二级分类名称"
               v-if="category_children_input"
               prop="childrenCategoryName"
+              :disabled="category_children_input"
             >
               <el-input v-model="form.childrenCategoryName"></el-input>
             </el-form-item>
@@ -93,12 +95,16 @@ export default {
           firstCategoryName: '',
           childrenCategoryName: '',
         })
+    // data - 默认输入框显示效果
     const category_first_input = ref(true);
     const category_children_input = ref(true);
+    // data - 编辑子级分类后<禁用一级分类输入框>
+    const category_first_disabled = ref(true);
+    const category_children_disabled = ref(true);
 
     // data - 按钮
     const submit_button_type = ref('');
-    const submit_button_disable = ref(false);
+    const submit_button_disable = ref(true);
     const submit_button_loading = ref(false);
 
     const category = reactive({
@@ -127,7 +133,8 @@ export default {
     // method 方法 ----------------------------------------------------------------------开始
     const addFirstCategoryStatus = () =>{
       category_first_input.value = true;
-      category_children_input.value = true;
+      category_children_input.value = false;
+      submit_button_disable.value = false;
     }
 
     // method - submit提交表单
@@ -190,7 +197,7 @@ export default {
     return {
       // data 数据-return
       labelPosition, form, category_first_input, category_children_input,
-      submit_button_type, submit_button_disable,submit_button_loading,
+      submit_button_type, submit_button_disable,submit_button_loading, category_first_disabled, category_children_disabled,
       category,
       // method 方法
       addFirstCategoryStatus, submit,
